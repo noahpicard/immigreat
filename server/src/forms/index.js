@@ -78,6 +78,26 @@ class State {
     });
   }
 
+  ifLessThanOrEqualTo(threshold, destination) {
+    this.transition(destination, (state) => {
+      if (state[this.field] <= threshold) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  ifEqualTo(threshold, destination) {
+    this.transition(destination, (state) => {
+      if (state[this.field] == threshold) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
   goTo(destination) {
     this.transition(destination, () => true);
   }
