@@ -1,7 +1,7 @@
 // include modules
-const express = require('express'),
-const app = express(),
-const path = require('path'),
+const express = require('express');
+const app = express();
+const path = require('path');
 const less = require('less-middleware');
 
 app.use(express.json())
