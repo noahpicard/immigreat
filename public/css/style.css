@@ -1,18 +1,144 @@
 body {
-  background: #eee;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;  
+  background: #f6f6f6;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;  
+  font-size: 16px;
+  margin: 0px;
+  padding: 0px;
 }
 
 h1 {
-  font-size: 50px;
+  font-size: 20px;
   text-align: center;
+}
+
+h3 {
+  font-size: 20px;
+  text-align: center;
+}
+
+p {
+	margin: 0px;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
 }
 
 .container {
   margin: 0 auto;
-  width: 600px;
+  max-width: 600px;
 }
 
 .container p, .container h2 {
   text-align: center;
+}
+
+.navbar {
+	background-color: #fff;
+	display: flex;
+}
+
+.navitem {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	min-width: 20px;
+	display: flex;
+	align-items: middle;
+	justify-content: middle;
+}
+
+.logo {
+	color: #00bb00;
+	font-weight: 700;
+}
+
+.subtitle {
+	margin: 3em 0em;
+}
+
+.navlink {
+	color: #666;
+	font-weight: 300;
+}
+
+.form-list {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-flow: row wrap;
+	width: calc(100%-60px);
+	border-radius: .5em;
+	padding: 1em;
+	margin: 2em 0em;
+	background: #999;
+}
+
+.form-item {
+	width: 120px;
+	height: 140px;
+	
+	border-radius: .5em;
+	margin: 1em;
+	background-color: #eee;
+	padding: 1em;
+	text-align: center;
+	font-weight: 500;
+}
+
+.form-flow {
+	min-height: 300px;
+	width: 100%;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	margin: 1em 0em;
+}
+
+.form-title {
+	font-weight: 200;
+}
+
+.form-question-container {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: center;
+	background-color: #fff;
+	border-radius: 1em;
+	min-height: 300px;
+	width: 100%;
+}
+
+.form-question {
+	color: #333;
+	font-weight: 500;
+	font-size: 150%;
+	margin: 0 0 0 0;
+}
+
+.form-answer-text {
+	border: none;
+	border-bottom: 1px solid #333;
+	height: 30px;
+	width: 240px;
+	font-size: 140%;
+	margin: 1em 0 1em 0;
+	text-align: center;
+}
+
+.form-answer-text::placeholder{
+	color: #ccc;
+}
+
+.form-question-details {
+	color: #666;
+	font-size: 80%;
+}
+
+.form-question-example {
+	color: #999;
+	font-size: 80%;
 }
