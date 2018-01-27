@@ -12,7 +12,7 @@ module.exports = (app) => {
       return res.status(400).send('Invalid form identifier.')
     }
 
-    const form = require(path.join(__dirname, 'forms', req.params.id))();
+    const form = new require(path.join(__dirname, 'forms', req.params.id))();
 
     let nextState;
     if (!req.body.current) {
