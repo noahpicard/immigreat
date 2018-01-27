@@ -1,43 +1,39 @@
 // include modules
-var    express = require('express'),
-    app = express(),
-    path = require('path'),
-    less = require('less-middleware');
-    
+const express = require('express'),
+const app = express(),
+const path = require('path'),
+const less = require('less-middleware');
+
+app.use(express.json())
 
 app.set('port', process.env.PORT || 1337);
 
 // compile and serve css
 app.use(less(path.join(__dirname,'source','less'),{
-    dest: path.join(__dirname, 'public'),
-    options: {
-        compiler: {
-            compress: false,
-        },
+  dest: path.join(__dirname, 'public'),
+  options: {
+    compiler: {
+      compress: false,
     },
-    preprocess: {
-        path: function(pathname, req) {
-            return pathname.replace('/css/','/'); 
-        },
+  },
+  preprocess: {
+    path: function(pathname, req) {
+      return pathname.replace('/css/','/');
     },
-    force: true,
+  },
+  force: true,
 }));
+
 // serve static content
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/moo', function (req, res) {
-    console.log('hey!');
-    res.send('Hello World!')
-  //return express.static(path.join(__dirname, 'public'));
-});
+app.post('/fill', function (req, res) {
 
-app.post('/moo', function (req, res) {
-    console.log('Okay!');
-    res.send('Hello World!')
+  res.send('Hello World!')
   //return express.static(path.join(__dirname, 'public'));
 });
 
 // setup server
 var server = app.listen(app.get('port'), function(){
- console.log('Express server listening on port ' + app.get('port'));
+  console.log('Express server listening on port ' + app.get('port'));
 });
