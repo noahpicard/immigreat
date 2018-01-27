@@ -10,7 +10,7 @@ const supportedForms = [
 tmp.setGracefulCleanup();
 
 class State {
-  constructor({ key, question, type, field, final = false, initial = false }) {
+  constructor({ key, context, placeholder, question, type, field, final = false, initial = false }) {
     // A unique key that identifies this state.
     this.key = key;
 
@@ -18,6 +18,12 @@ class State {
     // state of the form, produces the key of the next state to
     // transition to.
     this.rules = [];
+
+    // A string giving context for the question.
+    this.context = context;
+
+    // A string giving a placeholder (example) for the question.
+    this.placeholder = placeholder;
 
     // An associated question.
     this.question = question;

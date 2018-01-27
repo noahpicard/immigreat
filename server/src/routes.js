@@ -29,6 +29,8 @@ module.exports = (app) => {
     return res.status(200).send({
       nextState: nextState.key,
       nextStateQuestion: nextState.question,
+      nextStateContext: nextState.context,
+      nextStatePlaceholder: nextState.placeholder,
       nextStateType: nextState.type,
       nextStateField: nextState.field,
       nextStateFinal: nextState.final,
