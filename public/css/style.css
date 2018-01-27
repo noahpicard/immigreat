@@ -11,6 +11,11 @@ h1 {
   text-align: center;
 }
 
+h3 {
+  font-size: 20px;
+  text-align: center;
+}
+
 p {
 	margin: 0px;
 }
@@ -81,4 +86,59 @@ a {
 	padding: 1em;
 	text-align: center;
 	font-weight: 500;
+}
+
+.form-flow {
+	min-height: 300px;
+	width: 100%;
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	margin: 1em 0em;
+}
+
+.form-title {
+	font-weight: 200;
+}
+
+.form-question-container {
+	display: flex;
+	flex-flow: column nowrap;
+	align-items: center;
+	justify-content: center;
+	background-color: #fff;
+	border-radius: 1em;
+	min-height: 300px;
+	width: 100%;
+}
+
+.form-question {
+	color: #333;
+	font-weight: 500;
+	font-size: 150%;
+	margin: 0 0 0 0;
+}
+
+.form-answer-text {
+	border: none;
+	border-bottom: 1px solid #333;
+	height: 30px;
+	width: 240px;
+	font-size: 140%;
+	margin: 1em 0 1em 0;
+	text-align: center;
+}
+
+.form-answer-text::placeholder{
+	color: #ccc;
+}
+
+.form-question-details {
+	color: #666;
+	font-size: 80%;
+}
+
+.form-question-example {
+	color: #999;
+	font-size: 80%;
 }
