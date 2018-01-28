@@ -107,7 +107,7 @@ a {
 	align-items: center;
 	justify-content: center;
 	background-color: #fff;
-	border-radius: 1em;
+	border-radius: .5em;
 	min-height: 300px;
 	width: 100%;
 }

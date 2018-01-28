@@ -1,14 +1,90 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 /*import FormItem from './form-item';*/
 
 class FormFlow extends React.Component {
   constructor() {
     super();
+    this.state = {
+      "nextStateQuestion":"",
+      "nextStateType":"",
+      "nextStateFinal": false,
+      "nextState":"",
+      "questionState": {}
+    };
+    this.submit = this.submit.bind(this);
+    this.componentWillMount = this.componentWillMount.bind(this);
+    this.answer = this.answer.bind(this);
   }
 
-  onClick(event) {
-  	console.log(this.props.item);
+  componentWillMount() {
+
+    const self = this;
+
+  	let postUrl = "/form/" + this.props.id;
+  	console.log("sending request");
+    console.log(this.props.id);
+    console.log(postUrl);
+  	axios.post(postUrl, {})
+	  .then(function (response) {
+	    console.log(response);
+      self.setState(response.data);
+	  })
+	  .catch(function (error) {
+	    console.log(error);
+	  });
+  }
+
+  submit(event) {
+  	axios.post('/user', {
+	    firstName: 'Fred',
+	    lastName: 'Flintstone'
+	  })
+	  .then(function (response) {
+	    console.log(response);
+	  })
+	  .catch(function (error) {
+	    console.log(error);
+	  });
+  }
+
+
+  answer(answer) {
+    const self = this;
+
+    let postUrl = "/form/" + this.props.id;
+    console.log("sending answer");
+    console.log(this.props.id);
+    console.log(postUrl);
+    axios.post(postUrl, {
+      "current": this.state.nextState,
+      "state": this.state.questionState
+    })
+    .then(function (response) {
+      console.log(response);
+      self.setState(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  submitAnswer() {
+    const self = this;
+
+    let postUrl = "/form/" + this.props.id;
+    console.log("sending request");
+    console.log(this.props.id);
+    console.log(postUrl);
+    axios.post(postUrl, {})
+    .then(function (response) {
+      console.log(response);
+      self.setState(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    }); 
   }
 
   render() {
@@ -16,11 +92,19 @@ class FormFlow extends React.Component {
       <div className="form-flow">
       	<h1 className="form-title">{this.props.item} Form</h1>
       	<div className="form-question-container">
-	      	<span className="form-question">What is your name?</span>
-	      	<input className="form-answer-text" type="text" name="answer" placeholder="(First, Middle, Last)"></input>
-	      	<span className="form-question-details">(First, Middle, Last)</span>
+	      	<span className="form-question">{this.state.nextStateQuestion}</span>
+          { this.state.nextStateType == "STRING" &&
+	         <input className="form-answer-text" type="text" name="answer" placeholder="(First, Middle, Last)"></input>
+	      	}
+          { this.state.nextStateType == "BOOLEAN" &&
+            <span className="button" onClick={() => this.answer(true)}>Yes</span>
+          }
+          { this.state.nextStateType == "BOOLEAN" &&
+            <span className="button" onClick={() => this.answer(false)}>No</span>
+          }
+          <span className="form-question-details">(First, Middle, Last)</span>
 	      	<span className="form-question-example">e.g: Harry James Potter</span>
-	      	<div className="button form-question-submit-button">Next</div>
+	      	<div className="button form-question-submit-button" onClick={this.submit}>Next</div>
       	</div>
       </div>
     );
@@ -42,7 +126,7 @@ class FormItem extends React.Component {
   onClick(event) {
   	console.log(this.props.item);
   	ReactDOM.render(
-	  <FormFlow item={this.props.item}/>,
+	  <FormFlow item={this.props.item} id={this.props.id}/>,
 	  document.getElementById('root')
 	);
   }
@@ -50,7 +134,7 @@ class FormItem extends React.Component {
   render() {
     return(
       <div className="form-item" onClick={this.onClick}>
-      	{this.props.item}
+      	{this.props.item} {this.props.id}
       </div>
     );
   }
@@ -64,7 +148,7 @@ class FormList extends React.Component {
     return(
       <div className="form-list">
       	{this.props.items.map(function(listValue, index){
-            return <FormItem key={index} item={listValue}/>;
+            return <FormItem key={index} item={listValue.name} id={listValue.id}/>;
           })}
       </div>
     );
@@ -72,6 +156,6 @@ class FormList extends React.Component {
 }
 
 ReactDOM.render(
-  <FormList items={["Asylum", "Immigration", "Citizenship"]}/>,
+  <FormList items={[{"name": "Asylum", "id": "i589"}, {"name": "Immigration", "id": "i588"}, {"name": "Citizenship", "id": "i587"}]}/>,
   document.getElementById('root')
 );
