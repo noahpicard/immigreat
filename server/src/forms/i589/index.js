@@ -25,14 +25,6 @@ class i589 extends Form {
         type: 'STRING',
         field: 'FIRST_NAME',
         placeholder: 'Nour',
-      }).goTo('MIDDLE_NAME'),
-
-      new State({
-        key: 'MIDDLE_NAME',
-        question: 'What is your middle name?',
-        type: 'STRING',
-        field: 'MIDDLE_NAME',
-        placeholder: 'Abdulla',
       }).goTo('LAST_NAME'),
 
       new State({
@@ -41,43 +33,18 @@ class i589 extends Form {
         type: 'STRING',
         field: 'LAST_NAME',
         placeholder: 'Aldalaijan',
-      }).goTo('OTHER_NAMES'),
+      }).goTo('US_SSN'),
 
       new State({
-        key: 'OTHER_NAMES',
-        question: 'Have you used any other names? (Include maiden name and aliases). If so, please provide them here.',
-        placeholder: 'John Doe, Johnny Doe',
-        context: 'If you have a different name when travelling make sure to start using your real name now',
+        key: 'US_SSN',
+        question: 'If you have one, what is your United States Social Security Number?',
+        context: 'In the US a Social Security Number (SSN) is a number in the format 000-00-0000, unique for each individual, used to track Social Security benefits and for other identification purposes. Unless you are a non-citizen who wants to work in the United States, you probably don’t need a Social Security number.',
         type: 'STRING',
-        field: 'OTHER_NAMES',
-      }).goTo('GENDER'),
+        placeholder: '123-45-6789',
+        field: 'US_SSN',
+      }).goTo('MARITAL_STATUS'),
 
-      new State({ // FILL THIS OUT LATER: add a dropdown for male/female,
-        key: 'GENDER',
-        question: 'What is your gender?',
-        context: 'If you are transgender or your asylum claim involves matters of gender identity such that choosing either "Male" or "Female" is no simple matter, write an asterisk ("*") here and say, “See Supplement.” Then make sure to further explain this in your supplementary statement.',
-        type: 'MULTI',
-        options: ['Male', 'Female'],
-        field: 'GENDER',
-      }).goTo('DOB'),
-
-      new State({
-        key: 'DOB',
-        question: 'What is your date of birth?',
-        context: 'If you aren\'t sure of your birth date (and aren\'t able to locate documents showing it), you can enter your best estimate or write "unknown." Then enter an asterisk and explain the situation in your Supplement.',
-        type: 'NUMERIC',
-        placeholder: 'MM-DD-YYYY',
-        field: 'DOB',
-      }).goTo('BIRTH_CITY_COUNTRY'),
-
-      new State({
-        key: 'BIRTH_CITY_COUNTRY',
-        question: 'In which country and city were you born?',
-        type: 'STRING',
-        placeholder: 'Damascus, Syria',
-        field: 'BIRTH_CITY_COUNTRY',
-      }).goTo('BIRTH_NATIONALITY'),
-
+      /*
       new State({
         key: 'BIRTH_NATIONALITY',
         question: 'What was your Nationality when you were born?',
@@ -94,25 +61,8 @@ class i589 extends Form {
         type: 'STRING',
         placeholder: 'Iraqi',
         field: 'PRESENT_NATIONALITY',
-      }).goTo('RACE'),
-
-      new State({
-        key: 'RACE',
-        question: 'What Race, Ethnic or Tribal Group do you belong to?',
-        context: 'If you are applying for asylum based on race, ethnicity, or tribal affiliation, enter the name of your group here. Make sure that the identifying name matches any evidence that you are attaching to prove your claim. If you need further space to explain, use Supplement B.',
-        type: 'STRING',
-        placeholder: 'Kurdish',
-        field: 'RACE',
-      }).goTo('RELIGION'),
-
-      new State({
-        key: 'RELIGION',
-        question: 'Which Religion or Religious Group do you belong to?',
-        context: 'If you are applying for asylum based on religion, make sure your answer here matches any evidence that you provide with your application and that you name the specific branch, sect, or denomination. For example, instead of "Jewish," an applicant persecuted on the basis of religion might say, "Orthodox Jewish."',
-        type: 'STRING',
-        placeholder: 'Muslim',
-        field: 'RELIGION',
       }).goTo('MARITAL_STATUS'),
+      */
 
       new State({ // FILL THIS OUT LATER: checkboxes for states,
         // if MARRIED, open A.II 1-24. Otherwise, skip to your CHILDREN,
@@ -122,8 +72,93 @@ class i589 extends Form {
         type: 'MULTI',
         options: ['Single', 'Married', 'Divorced', 'Widowed'],
         field: 'MARITAL_STATUS',
-      })/*.ifChoice('Married').doSOMETHING('')*/.goTo('TRAVEL_DOC_ORIGIN'), // DO ABOVE,
+      }).goTo('ENGLISH_FLUENCY'), // DO ABOVE,
 
+      new State({
+        key: 'ENGLISH_FLUENCY',
+        question: ' Are you fluent in English?',
+        context: 'Do NOT say you are fluent in English unless you really are, and are willing to give up your right to bring an interpreter to your asylum interview (and have one supplied by the U.S. government if your case later proceeds to immigration court).',
+        type: 'BOOLEAN',
+        field: 'ENGLISH_FLUENCY',
+      }).goTo('COURT_NOW'),
+
+      new State({
+        key: 'COURT_NOW',
+        question: 'Are you currently in a court proceeding?',
+        type: 'BOOLEAN',
+        field: 'COURT_NOW',
+      }).ifFalse('COURT_EVER').ifTrue('FINAL'),
+
+      new State({
+        key: 'COURT_EVER',
+        question: 'Have you ever been through immigration court proceedings?',
+        context: 'If you have ever seen an immigration judge in removal proceedings or been arrested by immigration or border patrol authorities, see an attorney for help with your asylum application. You may not be eligible to File I-589 except via the immigration court.',
+        type: 'BOOLEAN',
+        field: 'COURT_EVER',
+      }).goTo('FINAL'),
+
+      new State({
+        key: 'FINAL',
+        question: "Thank you for providing this information. We're preparing your form.",
+        type: 'NONE',
+        final: true,
+      }),
+
+      /*new State({
+        key: 'OTHER_NAMES',
+        question: 'Have you used any other names? (Include maiden name and aliases). If so, please provide them here.',
+        placeholder: 'John Doe, Johnny Doe',
+        context: 'If you have a different name when travelling make sure to start using your real name now',
+        type: 'STRING',
+        field: 'OTHER_NAMES',
+      }).goTo('GENDER'),*/
+
+      /*new State({ // FILL THIS OUT LATER: add a dropdown for male/female,
+        key: 'GENDER',
+        question: 'What is your gender?',
+        context: 'If you are transgender or your asylum claim involves matters of gender identity such that choosing either "Male" or "Female" is no simple matter, write an asterisk ("*") here and say, “See Supplement.” Then make sure to further explain this in your supplementary statement.',
+        type: 'MULTI',
+        options: ['Male', 'Female'],
+        field: 'GENDER',
+      }).goTo('DOB'),*/
+
+      /*new State({
+        key: 'DOB',
+        question: 'What is your date of birth?',
+        context: 'If you aren\'t sure of your birth date (and aren\'t able to locate documents showing it), you can enter your best estimate or write "unknown." Then enter an asterisk and explain the situation in your Supplement.',
+        type: 'NUMERIC',
+        placeholder: 'MM-DD-YYYY',
+        field: 'DOB',
+      }).goTo('BIRTH_CITY_COUNTRY'),
+
+      new State({
+        key: 'BIRTH_CITY_COUNTRY',
+        question: 'In which country and city were you born?',
+        type: 'STRING',
+        placeholder: 'Damascus, Syria',
+        field: 'BIRTH_CITY_COUNTRY',
+      }).goTo('BIRTH_NATIONALITY'),*/
+
+
+      /*new State({
+        key: 'RACE',
+        question: 'What Race, Ethnic or Tribal Group do you belong to?',
+        context: 'If you are applying for asylum based on race, ethnicity, or tribal affiliation, enter the name of your group here. Make sure that the identifying name matches any evidence that you are attaching to prove your claim. If you need further space to explain, use Supplement B.',
+        type: 'STRING',
+        placeholder: 'Kurdish',
+        field: 'RACE',
+      }).goTo('RELIGION'),*/
+
+      /*new State({
+        key: 'RELIGION',
+        question: 'Which Religion or Religious Group do you belong to?',
+        context: 'If you are applying for asylum based on religion, make sure your answer here matches any evidence that you provide with your application and that you name the specific branch, sect, or denomination. For example, instead of "Jewish," an applicant persecuted on the basis of religion might say, "Orthodox Jewish."',
+        type: 'STRING',
+        placeholder: 'Muslim',
+        field: 'RELIGION',
+      }).goTo('MARITAL_STATUS'),*/
+
+      /*
       new State({
         key: 'TRAVEL_DOC_ORIGIN',
         question: 'What is your passport number or travel documentation number?',
@@ -149,15 +184,9 @@ class i589 extends Form {
         placeholder: 'Arabic',
         field: 'NATIVE_LANG',
       }).goTo('ENGLISH_FLUENCY'),
+      */
 
-      new State({
-        key: 'ENGLISH_FLUENCY',
-        question: ' Are you fluent in English?',
-        context: 'Do NOT say you are fluent in English unless you really are, and are willing to give up your right to bring an interpreter to your asylum interview (and have one supplied by the U.S. government if your case later proceeds to immigration court).',
-        type: 'BOOLEAN',
-        field: 'ENGLISH_FLUENCY',
-      }).goTo('OTHER_FLUENCY'),
-
+      /*
       new State({
         key: 'OTHER_FLUENCY',
         question: 'What other languages do you speak fluently? (If any)',
@@ -213,8 +242,9 @@ class i589 extends Form {
         type: 'NUMERIC',
         placeholder: 'Illinois',
         field: 'RESIDENCE_US_ZIPCODE',
-      }).goTo('PHONENUM'),
+      }).goTo('PHONENUM'),*/
 
+      /*
       new State({
         key: 'PHONENUM',
         question: 'What is your contact phone number?',
@@ -230,7 +260,9 @@ class i589 extends Form {
         type: 'BOOLEAN',
         field: 'FORM_FILLING',
       }).goTo('MAIL_ADDRESS'),
+      */
 
+      /*
       new State({
         key: 'MAIL_ADDRESS',
         question: 'Is your mailing address the same as the one you just entered?',
@@ -286,7 +318,9 @@ class i589 extends Form {
         placeholder: 'Illinois',
         field: 'MAIL_ADDRESS_ZIPCODE',
       }).goTo('ALIEN_NUM'),
+      */
 
+      /*
       new State({
         key: 'ALIEN_NUM',
         question: 'If you have one, what is your Alien Registration Number?',
@@ -295,16 +329,9 @@ class i589 extends Form {
         placeholder: '123456789',
         field: 'ALIEN_NUM',
       }).goTo('US_SSN'),
+      */
 
-      new State({
-        key: 'US_SSN',
-        question: 'If you have one, what is your United States Social Security Number?',
-        context: 'In the US a Social Security Number (SSN) is a number in the format 000-00-0000, unique for each individual, used to track Social Security benefits and for other identification purposes. Unless you are a non-citizen who wants to work in the United States, you probably don’t need a Social Security number.',
-        type: 'NUMERIC',
-        placeholder: '123-45-6789',
-        field: 'US_SSN',
-      }).goTo('USCIS_ACC'),
-
+      /*
       new State({
         key: 'USCIS_ACC',
         question: 'If you have one, what is your USCIS Online Account Number?',
@@ -339,24 +366,11 @@ class i589 extends Form {
         placeholder: '0123456789',
         field: '19_c',
       }).goTo('COURT_NOW'),
-
-      new State({
-        key: 'COURT_NOW',
-        question: 'Are you currently in a court proceeding?',
-        type: 'BOOLEAN',
-        field: 'COURT_NOW',
-      }).ifFalse('COURT_EVER').ifTrue('MARITAL'),
-
-      new State({
-        key: 'COURT_EVER',
-        question: 'Have you ever been through immigration court proceedings?',
-        context: 'If you have ever seen an immigration judge in removal proceedings or been arrested by immigration or border patrol authorities, see an attorney for help with your asylum application. You may not be eligible to File I-589 except via the immigration court.',
-        type: 'BOOLEAN',
-        field: 'COURT_EVER',
-      }).goTo('MARITAL'),
+      */
 
       // MARITAL SECTION - Skipped if not married
 
+      /*
       new State({
         key: 'SPOUSE_NAME',
         question: 'What is your spouse\'s name?',
@@ -424,6 +438,7 @@ class i589 extends Form {
         placeholder: 'Kurdish',
         field: 'SPOUCE_RACE',
       }).goTo('RELIGION'),
+      */
     ]
   }
 
@@ -558,16 +573,6 @@ class i589 extends Form {
       mapped[fields[54]] = true;
     } else {
       mapped[fields[55]] = true;
-    }
-
-    for (idx = 0; idx < fields.length; idx++) {
-      if (!(fields[idx] in mapped)) {
-        if (raw_fields[idx].type == 'text') {
-          mapped[fields[idx]] = util.format("%d", idx);
-        } else {
-          console.log(raw_fields[idx].type, idx, raw_fields[idx].name, raw_fields[idx].page);
-        }
-      }
     }
 
     return mapped;
