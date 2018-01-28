@@ -64,6 +64,13 @@ a {
 	font-weight: 300;
 }
 
+.button {
+	border-radius: .5em;
+	background-color: #ccc;
+	padding: .5em 1em;
+	cursor: pointer;
+}
+
 .form-list {
 	display: flex;
 	align-items: center;

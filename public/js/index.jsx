@@ -11,11 +11,13 @@ class FormFlow extends React.Component {
       "nextStateType":"",
       "nextStateFinal": false,
       "nextState":"",
-      "questionState": {}
+      "questionState": {},
+      "answerText": ""
     };
     this.submit = this.submit.bind(this);
     this.componentWillMount = this.componentWillMount.bind(this);
     this.answer = this.answer.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
   }
 
   componentWillMount() {
@@ -37,21 +39,22 @@ class FormFlow extends React.Component {
   }
 
   submit(event) {
-  	axios.post('/user', {
-	    firstName: 'Fred',
-	    lastName: 'Flintstone'
-	  })
-	  .then(function (response) {
-	    console.log(response);
-	  })
-	  .catch(function (error) {
-	    console.log(error);
-	  });
+  	if (this.state.nextStateType == "NONE") {
+      this.answer();
+    } else if (this.state.nextStateType == "STRING") {
+      this.answer(this.state.answerText);
+    }
   }
 
 
   answer(answer) {
     const self = this;
+
+    let state = this.state.questionState;
+    state[this.state.nextStateField] = answer;
+    this.setState({questionState: state});
+
+    this.clearFields();
 
     let postUrl = "/form/" + this.props.id;
     console.log("sending answer");
@@ -70,21 +73,12 @@ class FormFlow extends React.Component {
     });
   }
 
-  submitAnswer() {
-    const self = this;
+  clearFields() {
+    this.setState({"answerText": ""});
+  }
 
-    let postUrl = "/form/" + this.props.id;
-    console.log("sending request");
-    console.log(this.props.id);
-    console.log(postUrl);
-    axios.post(postUrl, {})
-    .then(function (response) {
-      console.log(response);
-      self.setState(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    }); 
+  handleTextChange(event) {
+    this.setState({"answerText": event.target.value});
   }
 
   render() {
@@ -94,24 +88,25 @@ class FormFlow extends React.Component {
       	<div className="form-question-container">
 	      	<span className="form-question">{this.state.nextStateQuestion}</span>
           { this.state.nextStateType == "STRING" &&
-	         <input className="form-answer-text" type="text" name="answer" placeholder="(First, Middle, Last)"></input>
+	         <input className="form-answer-text" type="text" name="answer" placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} onChange={this.handleTextChange}></input>
 	      	}
+          { this.state.nextStateType == "NUMERIC" &&
+           <input className="form-answer-text" type="text" name="answer" placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} onChange={this.handleTextChange}></input>
+          }
           { this.state.nextStateType == "BOOLEAN" &&
             <span className="button" onClick={() => this.answer(true)}>Yes</span>
           }
           { this.state.nextStateType == "BOOLEAN" &&
             <span className="button" onClick={() => this.answer(false)}>No</span>
           }
-          <span className="form-question-details">(First, Middle, Last)</span>
-	      	<span className="form-question-example">e.g: Harry James Potter</span>
+          <span className="form-question-details">{this.state.nextStateContext}</span>
+	      	<span className="form-question-example">e.g: {this.state.nextStatePlaceholder}</span>
 	      	<div className="button form-question-submit-button" onClick={this.submit}>Next</div>
       	</div>
       </div>
     );
   }
 }
-
-//POSt req with response to questions
 
 
 

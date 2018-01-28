@@ -37,11 +37,13 @@ var FormFlow = function (_React$Component) {
       "nextStateType": "",
       "nextStateFinal": false,
       "nextState": "",
-      "questionState": {}
+      "questionState": {},
+      "answerText": ""
     };
     _this.submit = _this.submit.bind(_this);
     _this.componentWillMount = _this.componentWillMount.bind(_this);
     _this.answer = _this.answer.bind(_this);
+    _this.handleTextChange = _this.handleTextChange.bind(_this);
     return _this;
   }
 
@@ -65,19 +67,22 @@ var FormFlow = function (_React$Component) {
   }, {
     key: 'submit',
     value: function submit(event) {
-      _axios2.default.post('/user', {
-        firstName: 'Fred',
-        lastName: 'Flintstone'
-      }).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
-        console.log(error);
-      });
+      if (this.state.nextStateType == "NONE") {
+        this.answer();
+      } else if (this.state.nextStateType == "STRING") {
+        this.answer(this.state.answerText);
+      }
     }
   }, {
     key: 'answer',
     value: function answer(_answer) {
       var self = this;
+
+      var state = this.state.questionState;
+      state[this.state.nextStateField] = _answer;
+      this.setState({ questionState: state });
+
+      this.clearFields();
 
       var postUrl = "/form/" + this.props.id;
       console.log("sending answer");
@@ -94,20 +99,14 @@ var FormFlow = function (_React$Component) {
       });
     }
   }, {
-    key: 'submitAnswer',
-    value: function submitAnswer() {
-      var self = this;
-
-      var postUrl = "/form/" + this.props.id;
-      console.log("sending request");
-      console.log(this.props.id);
-      console.log(postUrl);
-      _axios2.default.post(postUrl, {}).then(function (response) {
-        console.log(response);
-        self.setState(response.data);
-      }).catch(function (error) {
-        console.log(error);
-      });
+    key: 'clearFields',
+    value: function clearFields() {
+      this.setState({ "answerText": "" });
+    }
+  }, {
+    key: 'handleTextChange',
+    value: function handleTextChange(event) {
+      this.setState({ "answerText": event.target.value });
     }
   }, {
     key: 'render',
@@ -131,7 +130,8 @@ var FormFlow = function (_React$Component) {
             { className: 'form-question' },
             this.state.nextStateQuestion
           ),
-          this.state.nextStateType == "STRING" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer', placeholder: '(First, Middle, Last)' }),
+          this.state.nextStateType == "STRING" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer', placeholder: this.state.nextStatePlaceholder, value: this.state.answerText, onChange: this.handleTextChange }),
+          this.state.nextStateType == "NUMERIC" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer', placeholder: this.state.nextStatePlaceholder, value: this.state.answerText, onChange: this.handleTextChange }),
           this.state.nextStateType == "BOOLEAN" && _react2.default.createElement(
             'span',
             { className: 'button', onClick: function onClick() {
@@ -149,12 +149,13 @@ var FormFlow = function (_React$Component) {
           _react2.default.createElement(
             'span',
             { className: 'form-question-details' },
-            '(First, Middle, Last)'
+            this.state.nextStateContext
           ),
           _react2.default.createElement(
             'span',
             { className: 'form-question-example' },
-            'e.g: Harry James Potter'
+            'e.g: ',
+            this.state.nextStatePlaceholder
           ),
           _react2.default.createElement(
             'div',
@@ -168,9 +169,6 @@ var FormFlow = function (_React$Component) {
 
   return FormFlow;
 }(_react2.default.Component);
-
-//POSt req with response to questions
-
 
 var FormItem = function (_React$Component2) {
   _inherits(FormItem, _React$Component2);
