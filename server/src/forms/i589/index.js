@@ -480,7 +480,7 @@ class i589 extends Form {
 
     const fields = this.fields().map(field => field.name);
 
-    console.log(fields.map((field, idx) => [field, idx]));
+    console.log(this.fields().map((field, idx) => [field, idx]));
 
     let mapped = {}
 
@@ -491,8 +491,11 @@ class i589 extends Form {
     mapped[fields[0]] = ALIEN_NUM;
     mapped[fields[4]] = util.format("%d %s", RESIDENCE_US_NUMBER, RESIDENCE_US_STREET);
 
-    // Doesn't work
-    // mapped["form1[0].#subform[0].PartALine9Gender"] = MARITAL_STATUS;
+    if (GENDER == "Male") {
+      mapped[fields[20]] = true;
+    } else if (GENDER == "Female") {
+      mapped[fields[21]] = true;
+    }
 
     return mapped;
   }
