@@ -416,11 +416,29 @@ class i589 extends Form {
 
       State({ 
         key: 'SPOUSE_BIRTH_CITY_COUNTRY',
-        question: 'In which country and city were you born?'
+        question: 'In which country and city was your spouse born?'
         type: 'STRING',
         placeholder: 'Damascus, Syria',
         field: 'SPOUSE_BIRTH_CITY_COUNTRY',
-      }).goTo('SPOUSE_BIRTH_NATIONALITY'),
+      }).goTo('SPOUSE_PRESENT_NATIONALITY'),
+
+      State({ 
+        key: 'SPOUSE_PRESENT_NATIONALITY',
+        question: 'What is your spouse\'s Nationality right now?',
+        context: 'You can say that they are stateless if their nationality has been taken away from them and you have no legal right to live in any country. The fact that you might be arrested if you return to your home country, however, does not make you stateless.',
+        type: 'STRING',
+        placeholder: 'Iraqi',
+        field: 'SPOUSE_PRESENT_NATIONALITY',
+      }).goTo('SPOUSE_RACE'),
+
+      State({ 
+        key: 'RACE',
+        question: 'What Race, Ethnic or Tribal Group does your spouse belong to?',
+        context: 'If you are applying for asylum based on race, ethnicity, or tribal affiliation, enter the name of your group here. Make sure that the identifying name matches any evidence that you are attaching to prove your claim. If you need further space to explain, use Supplement B.',
+        type: 'STRING',
+        placeholder: 'Kurdish',
+        field: 'RACE',
+      }).goTo('RELIGION'),
       
 
 
