@@ -18,7 +18,6 @@ class i589 extends Form {
         placeholder: 'Nour',
         initial: true, // This is the first pop up info blurb,
       }).goTo('NAME'),
-
       new State({ 
         key: 'NAME',
         question: 'What is your name?',
@@ -320,7 +319,42 @@ class i589 extends Form {
         type: 'NUMERIC',
         placeholder: '123456789',
         field: 'USCIS_ACC',
-      }).goTo('USCIS_ACC'),
+      }).goTo('19_a'),
+
+      new State({ 
+        key: '19_a',
+        question: 'When did you last leave your country?'
+        type: 'NUMERIC',
+        placeholder: 'MM/DD/YYY',
+        field: '19_a',
+      }).goTo('19_b'),
+
+      new State({ 
+        key: '19_b',
+        question: 'If you have one, what is your current I-94 number?',
+        context: 'If you have entered the US on a Visa before your I-94 number should be entered here. If you have not, this question does not appy and you can skip it.  Be sure to answer this section completely and truthfully even if you entered without inspection or overstayed your visa. In most cases, immigration violations will not affect your asylum case if they were due to an effort to escape persecution.',
+        type: 'NUMERIC',
+        placeholder: '0123456789',
+        field: '19_b',
+      }).goTo('19_c'),
+
+      new State({ // TODO: MULTI BLANK input state, please add
+        key: '19_c',
+        question: 'If you have one, what is your current I-94 number?',
+        context: 'If you have entered the US on a Visa before your I-94 number should be entered here. If you have not, this question does not appy and you can skip it.  Be sure to answer this section completely and truthfully even if you entered without inspection or overstayed your visa. In most cases, immigration violations will not affect your asylum case if they were due to an effort to escape persecution.',
+        type: 'NUMERIC',
+        placeholder: '0123456789',
+        field: '19_c',
+      }).goTo('COURT_NOW'),
+
+      new State({ 
+        key: 'COURT_NOW',
+        question: 'Are you currently in a court proceeding',
+        context: 'If you have entered the US on a Visa before your I-94 number should be entered here. If you have not, this question does not appy and you can skip it.  Be sure to answer this section completely and truthfully even if you entered without inspection or overstayed your visa. In most cases, immigration violations will not affect your asylum case if they were due to an effort to escape persecution.',
+        type: 'NUMERIC',
+        placeholder: '0123456789',
+        field: 'COURT_NOW',
+      }).goTo('COURT_NOW'),
       
     ]
   }
