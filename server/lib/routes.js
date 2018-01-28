@@ -1,19 +1,19 @@
 const { supportedForms } = require('./forms');
 const path = require('path');
 
-module.exports = (app) => {
+module.exports = app => {
   app.get('/', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../../public/index.html'));
   });
   app.get('/form', (req, res) => {
     res.send({
-      supportedForms,
+      supportedForms
     });
   });
 
   app.post('/form/:id', (req, res) => {
     if (!supportedForms.includes(req.params.id)) {
-      return res.status(400).send('Invalid form identifier.')
+      return res.status(400).send('Invalid form identifier.');
     }
 
     const FormClass = require(path.join(__dirname, 'forms', req.params.id));
@@ -29,7 +29,7 @@ module.exports = (app) => {
     }
 
     if (!nextState) {
-      return res.status(500).send('Unable to determine next state.')
+      return res.status(500).send('Unable to determine next state.');
     }
 
     return res.status(200).send({
@@ -40,7 +40,7 @@ module.exports = (app) => {
       nextStateType: nextState.type,
       nextStateField: nextState.field,
       nextStateFinal: nextState.final,
-      nextStateInitial: nextState.initial,
-    })
+      nextStateInitial: nextState.initial
+    });
   });
-}
+};
