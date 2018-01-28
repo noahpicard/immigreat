@@ -219,7 +219,7 @@ class i589 extends Form {
         key: 'PHONENUM',
         question: 'What is your contact phone number?',
         type: 'NUMERIC',
-        placeholder: '(001) 123-456-1234',
+        placeholder: '001-456-1234',
         field: 'PHONENUM',
       }).goTo('FORM_FILLING'),
 
@@ -444,7 +444,7 @@ class i589 extends Form {
       TRAVEL_DOC_ORIGIN = "",
       DOC_EXPIRE_DATE = "",
       NATIVE_LANG = "",
-      ENGLISH_FLUENCY = "",
+      ENGLISH_FLUENCY = true,
       OTHER_FLUENCY = "",
       RESIDENCE_US_STREET = "",
       RESIDENCE_US_NUMBER = "",
@@ -454,7 +454,7 @@ class i589 extends Form {
       RESIDENCE_US_ZIPCODE = "",
       PHONENUM = "",
       FORM_FILLING = false,
-      MAIL_ADDRESS = "",
+      MAIL_ADDRESS = false,
       MAIL_ADDRESS_STREET = "",
       MAIL_ADDRESS_NUM = "",
       MAIL_ADDRESS_APT_NUM = "",
@@ -466,33 +466,109 @@ class i589 extends Form {
       USCIS_ACC = "",
       COURT_NOW = false,
       COURT_EVER = false,
-      SPOUSE_NAME = "",
-      SPOUSE_MIDDLE_NAME = "",
-      SPOUSE_LAST_NAME = "",
-      SPOUSE_OTHER_NAMES = "",
-      SPOUSE_DOB = "",
-      SPOUSE_BIRTH_CITY_COUNTRY = "",
-      SPOUSE_PRESENT_NATIONALITY = "",
-      SPOUCE_RACE = "",
+      MARRIED = false,
+      HAS_CHILDREN = false,
     } = state;
 
     // TODO: 19_b, 19_c invalid identifiers
 
-    const fields = this.fields().map(field => field.name);
+    const raw_fields = this.fields();
 
-    console.log(fields.map((field, idx) => [field, idx]));
+    const fields = raw_fields.map(field => field.name);
 
     let mapped = {}
+
+    // mapped[fields[47]] = TORTURE;
+
+    mapped[fields[87]] = !MARRIED;
+
+    if (!HAS_CHILDREN) {
+      mapped[fields[115]] = true;
+    }
+
+    // Information about application.
+    mapped[fields[306]] = true;
+    mapped[fields[307]] = true;
+    mapped[fields[308]] = true;
+    mapped[fields[309]] = true;
+    mapped[fields[314]] = true;
+    mapped[fields[315]] = true;
+    mapped[fields[316]] = true;
+    mapped[fields[317]] = true;
+    mapped[fields[321]] = true;
+    mapped[fields[322]] = true;
+    mapped[fields[323]] = true;
 
     mapped[fields[8]] = FIRST_NAME;
     mapped[fields[9]] = MIDDLE_NAME;
     mapped[fields[2]] = LAST_NAME;
+    mapped[fields[57]] = USCIS_ACC;
 
+    mapped[fields[3]] = OTHER_NAMES;
     mapped[fields[0]] = ALIEN_NUM;
     mapped[fields[4]] = util.format("%d %s", RESIDENCE_US_NUMBER, RESIDENCE_US_STREET);
 
-    // Doesn't work
-    // mapped["form1[0].#subform[0].PartALine9Gender"] = MARITAL_STATUS;
+    if (GENDER === "Male") {
+      mapped[fields[20]] = true;
+    } else if (GENDER === "Female") {
+      mapped[fields[21]] = true;
+    }
+
+    mapped[fields[1]] = US_SSN;
+    mapped[fields[6]] = DOB;
+
+    mapped[fields[5]] = RESIDENCE_US_CITY;
+    mapped[fields[13]] = RESIDENCE_US_STATE;
+    mapped[fields[14]] = RESIDENCE_US_ZIPCODE;
+    mapped[fields[12]] = RESIDENCE_US_APT_NUM;
+
+    if (MAIL_ADDRESS) {
+      mapped[fields[16]] = util.format("%d %s", MAIL_ADDRESS_NUM, MAIL_ADDRESS_STREET);
+      mapped[fields[15]] = MAIL_ADDRESS_APT_NUM;
+      mapped[fields[18]] = MAIL_ADDRESS_CITY;
+      mapped[fields[19]] = MAIL_ADDRESS_STATE;
+      mapped[fields[17]] = MAIL_ADDRESS_ZIPCODE;
+    }
+
+    mapped[fields[26]] = BIRTH_CITY_COUNTRY;
+    mapped[fields[27]] = BIRTH_NATIONALITY;
+    mapped[fields[7]] = PRESENT_NATIONALITY;
+    mapped[fields[28]] = RACE;
+    mapped[fields[29]] = RELIGION;
+
+    if (MARITAL_STATUS === "Single") {
+      mapped[fields[22]] = true;
+    } else if (MARITAL_STATUS === "Married") {
+      mapped[fields[23]] = true;
+    } else if (MARITAL_STATUS === "Divorced") {
+      mapped[fields[24]] = true;
+    } else if (MARITAL_STATUS === "Widowed") {
+      mapped[fields[25]] = true;
+    }
+
+    if (COURT_NOW) {
+      mapped[fields[32]] = true;
+    } else if (COURT_EVER) {
+      mapped[fields[31]] = true;
+    } else {
+      mapped[fields[30]] = true;
+    }
+
+    if (ENGLISH_FLUENCY) {
+      mapped[fields[54]] = true;
+    } else {
+      mapped[fields[55]] = true;
+    }
+
+    for (idx = 0; idx < fields.length; idx++) {
+      if (!(fields[idx] in mapped)) {
+        if (raw_fields[idx].type == 'text') {
+          mapped[fields[idx]] = util.format("%d", idx);
+        } else {
+          console.log(raw_fields[idx].type, idx, raw_fields[idx].name, raw_fields[idx].page);
+        }
+      }
+    }
 
     return mapped;
   }
