@@ -118,6 +118,7 @@ class State {
 
   goTo(destination) {
     this.transition(destination, () => true);
+    return this;
   }
 }
 

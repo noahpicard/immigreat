@@ -22,7 +22,8 @@ module.exports = (app) => {
       // We need to transition to the first state.
       nextState = form.states.find(state => state.initial);
     } else {
-      nextState = form.transition(req.body.current, req.body.state);
+      const nextStateId = form.transition(req.body.current, req.body.state);
+      nextState = form.states.find(state => state.key == nextStateId);
     }
 
     if (!nextState) {
@@ -38,6 +39,7 @@ module.exports = (app) => {
       nextStateField: nextState.field,
       nextStateFinal: nextState.final,
       nextStateInitial: nextState.initial,
+      nextStateOptions: nextState.options,
     })
   });
 }
