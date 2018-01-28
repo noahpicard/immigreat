@@ -39,7 +39,7 @@ class i589 extends Form {
         key: 'US_SSN',
         question: 'If you have one, what is your United States Social Security Number?',
         context: 'In the US a Social Security Number (SSN) is a number in the format 000-00-0000, unique for each individual, used to track Social Security benefits and for other identification purposes. Unless you are a non-citizen who wants to work in the United States, you probably don’t need a Social Security number.',
-        type: 'NUMERIC',
+        type: 'STRING',
         placeholder: '123-45-6789',
         field: 'US_SSN',
       }).goTo('MARITAL_STATUS'),
