@@ -62,6 +62,7 @@ class FormFlow extends React.Component {
     console.log("finishing form");
     console.log(this.props.id);
     console.log(postUrl);
+    console.log(this.state.questionState);
 
     axios.post(postUrl, {
       "current": this.state.nextState,

@@ -1710,6 +1710,7 @@ var FormFlow = function (_React$Component) {
       console.log("finishing form");
       console.log(this.props.id);
       console.log(postUrl);
+      console.log(this.state.questionState);
 
       _axios2.default.post(postUrl, {
         "current": this.state.nextState,
