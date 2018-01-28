@@ -1,4 +1,5 @@
 const { supportedForms } = require('./forms');
+const path = require('path');
 
 module.exports = (app) => {
   app.get('/form', (req, res) => {
@@ -7,19 +8,22 @@ module.exports = (app) => {
     });
   });
 
-  app.get('/form/:id', (req, res) => {
+  app.post('/form/:id', (req, res) => {
     if (!supportedForms.includes(req.params.id)) {
       return res.status(400).send('Invalid form identifier.')
     }
 
-    const form = require(path.join('./', req.params.id))();
+    const FormClass = require(path.join(__dirname, 'forms', req.params.id));
+
+    const form = new FormClass();
 
     let nextState;
     if (!req.body.current) {
       // We need to transition to the first state.
       nextState = form.states.find(state => state.initial);
     } else {
-      nextState = form.transition(req.body.current, req.body.state);
+      const nextStateId = form.transition(req.body.current, req.body.state);
+      nextState = form.states.find(state => state.key == nextStateId);
     }
 
     if (!nextState) {
@@ -29,10 +33,13 @@ module.exports = (app) => {
     return res.status(200).send({
       nextState: nextState.key,
       nextStateQuestion: nextState.question,
+      nextStateContext: nextState.context,
+      nextStatePlaceholder: nextState.placeholder,
       nextStateType: nextState.type,
       nextStateField: nextState.field,
       nextStateFinal: nextState.final,
       nextStateInitial: nextState.initial,
+      nextStateOptions: nextState.options,
     })
   });
 }

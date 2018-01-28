@@ -10,7 +10,7 @@ const supportedForms = [
 tmp.setGracefulCleanup();
 
 class State {
-  constructor({ key, question, type, field, final = false, initial = false }) {
+  constructor({ key, context, placeholder, question, type, options, field, final = false, initial = false }) {
     // A unique key that identifies this state.
     this.key = key;
 
@@ -18,6 +18,12 @@ class State {
     // state of the form, produces the key of the next state to
     // transition to.
     this.rules = [];
+
+    // A string giving context for the question.
+    this.context = context;
+
+    // A string giving a placeholder (example) for the question.
+    this.placeholder = placeholder;
 
     // An associated question.
     this.question = question;
@@ -28,8 +34,11 @@ class State {
     // Is this the initial state.
     this.initial = initial;
 
+    // Available options, for a 'multi' state.
+    this.options = options;
+
     // An associated type of question.
-    if (!['STRING', 'BOOLEAN', 'NUMERIC', 'NONE'].includes(type)) {
+    if (!['STRING', 'BOOLEAN', 'NUMERIC', 'MULTI', 'NONE'].includes(type)) {
       throw Error('Invalid type provided.');
     }
     this.type = type;
@@ -46,6 +55,8 @@ class State {
 
       return null;
     });
+
+    return this;
   }
 
   ifTrue(destination) {
@@ -56,6 +67,8 @@ class State {
 
       return false;
     });
+
+    return this;
   }
 
   ifFalse(destination) {
@@ -66,6 +79,8 @@ class State {
 
       return false;
     });
+
+    return this;
   }
 
   ifGreaterThanOrEqualTo(threshold, destination) {
@@ -76,10 +91,37 @@ class State {
 
       return false;
     });
+
+    return this;
+  }
+
+  ifLessThanOrEqualTo(threshold, destination) {
+    this.transition(destination, (state) => {
+      if (state[this.field] <= threshold) {
+        return true;
+      }
+
+      return false;
+    });
+
+    return this;
+  }
+
+  ifEqualTo(threshold, destination) {
+    this.transition(destination, (state) => {
+      if (state[this.field] == threshold) {
+        return true;
+      }
+
+      return false;
+    });
+
+    return this;
   }
 
   goTo(destination) {
     this.transition(destination, () => true);
+    return this;
   }
 }
 
@@ -153,5 +195,6 @@ class Form {
 
 module.exports = {
   Form,
+  State,
   supportedForms,
 }
