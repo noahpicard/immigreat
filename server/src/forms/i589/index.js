@@ -1,4 +1,5 @@
 const path = require('path');
+const util = require('util');
 
 const { Form, State } = require('../index.js');
 
@@ -53,9 +54,10 @@ class i589 extends Form {
 
       new State({ // FILL THIS OUT LATER: add a dropdown for male/female,
         key: 'GENDER',
-        question: 'Are you male?',
+        question: 'What is your gender?',
         context: 'If you are transgender or your asylum claim involves matters of gender identity such that choosing either "Male" or "Female" is no simple matter, write an asterisk ("*") here and say, “See Supplement.” Then make sure to further explain this in your supplementary statement.',
         type: 'MULTI',
+        options: ['Male', 'Female'],
         field: 'GENDER',
       }).goTo('DOB'),
 
@@ -146,15 +148,6 @@ class i589 extends Form {
         type: 'STRING',
         placeholder: 'Arabic',
         field: 'NATIVE_LANG',
-      }).goTo('DOC_EXPIRE_DATE'),
-
-      new State({
-        key: 'NATIVE_LANG',
-        question: 'What is your native language (include dialect, if applicable)?',
-        context: 'Your "native language" is the one you spoke at home. If you used another language at school or at work, enter that in Question 25.',
-        type: 'STRING',
-        placeholder: 'Arabic',
-        field: 'NATIVE_LANG',
       }).goTo('ENGLISH_FLUENCY'),
 
       new State({
@@ -184,7 +177,7 @@ class i589 extends Form {
 
       new State({
         key: 'RESIDENCE_US_NUM',
-        question: 'Which number?',
+        question: 'Which number on that street?',
         type: 'NUMERIC',
         placeholder: '10',
         field: 'RESIDENCE_US_NUM',
@@ -263,7 +256,7 @@ class i589 extends Form {
       }).goTo('MAIL_ADDRESS_APT_NUM'),
 
       new State({
-        key: 'RESIDENCE_US_APT_NUM',
+        key: 'MAIL_ADDRESS_APT_NUM',
         question: 'Which apartment number?',
         type: 'NUMERIC',
         placeholder: '3',
@@ -362,13 +355,6 @@ class i589 extends Form {
         field: 'COURT_EVER',
       }).goTo('MARITAL'),
 
-      new State({
-        key: 'COURT_NOW',
-        question: 'Are you currently in a court proceeding?',
-        type: 'BOOLEAN',
-        field: 'COURT_NOW',
-      }).ifFalse('COURT_EVER').ifTrue('MARITAL'),
-
       // MARITAL SECTION - Skipped if not married
 
       new State({
@@ -397,7 +383,7 @@ class i589 extends Form {
 
       new State({
         key: 'SPOUSE_OTHER_NAMES',
-        question: 'Has your used any other names? (Include maiden name and aliases). If so, please provide them here.',
+        question: 'Has your spouse used any other names? (Include maiden name and aliases). If so, please provide them here.',
         placeholder: 'John Doe, Johnny Doe',
         context: 'If your spouse has a different name when travelling make sure to start using their real name now.',
         type: 'STRING',
@@ -431,14 +417,84 @@ class i589 extends Form {
       }).goTo('SPOUSE_RACE'),
 
       new State({
-        key: 'RACE',
+        key: 'SPOUCE_RACE',
         question: 'What Race, Ethnic or Tribal Group does your spouse belong to?',
         context: 'If you are applying for asylum based on race, ethnicity, or tribal affiliation, enter the name of your group here. Make sure that the identifying name matches any evidence that you are attaching to prove your claim. If you need further space to explain, use Supplement B.',
         type: 'STRING',
         placeholder: 'Kurdish',
-        field: 'RACE',
+        field: 'SPOUCE_RACE',
       }).goTo('RELIGION'),
     ]
+  }
+
+  mapStateToFields(state = {}) {
+    const {
+      FIRST_NAME = "",
+      MIDDLE_NAME = "",
+      LAST_NAME = "",
+      OTHER_NAMES = "",
+      GENDER = "Male",
+      DOB = "",
+      BIRTH_CITY_COUNTRY = "",
+      BIRTH_NATIONALITY = "",
+      PRESENT_NATIONALITY = "",
+      RACE = "",
+      RELIGION = "",
+      MARITAL_STATUS = "Single",
+      TRAVEL_DOC_ORIGIN = "",
+      DOC_EXPIRE_DATE = "",
+      NATIVE_LANG = "",
+      ENGLISH_FLUENCY = "",
+      OTHER_FLUENCY = "",
+      RESIDENCE_US_STREET = "",
+      RESIDENCE_US_NUMBER = "",
+      RESIDENCE_US_APT_NUM = "",
+      RESIDENCE_US_CITY = "",
+      RESIDENCE_US_STATE = "",
+      RESIDENCE_US_ZIPCODE = "",
+      PHONENUM = "",
+      FORM_FILLING = false,
+      MAIL_ADDRESS = "",
+      MAIL_ADDRESS_STREET = "",
+      MAIL_ADDRESS_NUM = "",
+      MAIL_ADDRESS_APT_NUM = "",
+      MAIL_ADDRESS_CITY = "",
+      MAIL_ADDRESS_STATE = "",
+      MAIL_ADDRESS_ZIPCODE = "",
+      ALIEN_NUM = "",
+      US_SSN = "",
+      USCIS_ACC = "",
+      COURT_NOW = false,
+      COURT_EVER = false,
+      SPOUSE_NAME = "",
+      SPOUSE_MIDDLE_NAME = "",
+      SPOUSE_LAST_NAME = "",
+      SPOUSE_OTHER_NAMES = "",
+      SPOUSE_DOB = "",
+      SPOUSE_BIRTH_CITY_COUNTRY = "",
+      SPOUSE_PRESENT_NATIONALITY = "",
+      SPOUCE_RACE = "",
+    } = state;
+
+    // TODO: 19_b, 19_c invalid identifiers
+
+    const fields = this.fields().map(field => field.name);
+
+    console.log(fields.map((field, idx) => [field, idx]));
+
+    let mapped = {}
+
+    mapped[fields[8]] = FIRST_NAME;
+    mapped[fields[9]] = MIDDLE_NAME;
+    mapped[fields[2]] = LAST_NAME;
+
+    mapped[fields[0]] = ALIEN_NUM;
+    mapped[fields[4]] = util.format("%d %s", RESIDENCE_US_NUMBER, RESIDENCE_US_STREET);
+
+    // Doesn't work
+    // mapped["form1[0].#subform[0].PartALine9Gender"] = MARITAL_STATUS;
+
+    return mapped;
   }
 }
 
