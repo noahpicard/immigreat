@@ -83,30 +83,36 @@ class FormFlow extends React.Component {
   }
 
   render() {
+    const self = this;
     return(
       <div className="form-flow">
       	<h1 className="form-title">{this.props.item} Form</h1>
       	<div className="form-question-container">
 	      	<span className="form-question">{this.state.nextStateQuestion}</span>
+          
           { this.state.nextStateType == "STRING" &&
 	         <input className="form-answer-text" type="text" name="answer" placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} onChange={this.handleTextChange}></input>
 	      	}
+
           { this.state.nextStateType == "NUMERIC" &&
            <input className="form-answer-text" type="text" name="answer" placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} onChange={this.handleTextChange}></input>
           }
+
           { this.state.nextStateType == "BOOLEAN" &&
-            <span className="button" onClick={() => this.answer(true)}>Yes</span>
+            <div className="button-section">
+              <span className="button" onClick={() => self.answer(true)}>Yes</span>
+              <span className="button" onClick={() => self.answer(false)}>No</span>
+            </div>
           }
-          { this.state.nextStateType == "BOOLEAN" &&
-            <span className="button" onClick={() => this.answer(false)}>No</span>
-          }
+
           { this.state.nextStateType == "MULTI" &&
-            <span>
-              {this.props.items.map(function(listValue, index){
-                return <span className="button" onClick={() => this.answer(listValue)}>listValue</span>;
+            <div className="button-section">
+              {this.state.nextStateOptions.map(function(listValue, index){
+                return <span className="button" key={index} onClick={() => self.answer(listValue)}>{listValue}</span>;
               })} 
-            </span>
+            </div>
           }
+          
           <span className="form-question-details">{this.state.nextStateContext}</span>
 	      	<span className="form-question-example">e.g: {this.state.nextStatePlaceholder}</span>
 	      	<div className="button form-question-submit-button" onClick={this.submit}>Next</div>

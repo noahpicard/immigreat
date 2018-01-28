@@ -1730,8 +1730,7 @@ var FormFlow = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
+      var self = this;
       return _react2.default.createElement(
         'div',
         { className: 'form-flow' },
@@ -1752,18 +1751,35 @@ var FormFlow = function (_React$Component) {
           this.state.nextStateType == "STRING" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer', placeholder: this.state.nextStatePlaceholder, value: this.state.answerText, onChange: this.handleTextChange }),
           this.state.nextStateType == "NUMERIC" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer', placeholder: this.state.nextStatePlaceholder, value: this.state.answerText, onChange: this.handleTextChange }),
           this.state.nextStateType == "BOOLEAN" && _react2.default.createElement(
-            'span',
-            { className: 'button', onClick: function onClick() {
-                return _this2.answer(true);
-              } },
-            'Yes'
+            'div',
+            { className: 'button-section' },
+            _react2.default.createElement(
+              'span',
+              { className: 'button', onClick: function onClick() {
+                  return self.answer(true);
+                } },
+              'Yes'
+            ),
+            _react2.default.createElement(
+              'span',
+              { className: 'button', onClick: function onClick() {
+                  return self.answer(false);
+                } },
+              'No'
+            )
           ),
-          this.state.nextStateType == "BOOLEAN" && _react2.default.createElement(
-            'span',
-            { className: 'button', onClick: function onClick() {
-                return _this2.answer(false);
-              } },
-            'No'
+          this.state.nextStateType == "MULTI" && _react2.default.createElement(
+            'div',
+            { className: 'button-section' },
+            this.state.nextStateOptions.map(function (listValue, index) {
+              return _react2.default.createElement(
+                'span',
+                { className: 'button', key: index, onClick: function onClick() {
+                    return self.answer(listValue);
+                  } },
+                listValue
+              );
+            })
           ),
           _react2.default.createElement(
             'span',
@@ -1795,10 +1811,10 @@ var FormItem = function (_React$Component2) {
   function FormItem() {
     _classCallCheck(this, FormItem);
 
-    var _this3 = _possibleConstructorReturn(this, (FormItem.__proto__ || Object.getPrototypeOf(FormItem)).call(this));
+    var _this2 = _possibleConstructorReturn(this, (FormItem.__proto__ || Object.getPrototypeOf(FormItem)).call(this));
 
-    _this3.onClick = _this3.onClick.bind(_this3);
-    return _this3;
+    _this2.onClick = _this2.onClick.bind(_this2);
+    return _this2;
   }
 
   _createClass(FormItem, [{
