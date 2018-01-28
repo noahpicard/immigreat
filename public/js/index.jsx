@@ -36,6 +36,7 @@ class FormFlow extends React.Component {
 	  .catch(function (error) {
 	    console.log(error);
 	  });
+
   }
 
   submit(event) {
@@ -98,6 +99,13 @@ class FormFlow extends React.Component {
           }
           { this.state.nextStateType == "BOOLEAN" &&
             <span className="button" onClick={() => this.answer(false)}>No</span>
+          }
+          { this.state.nextStateType == "MULTI" &&
+            <span>
+              {this.props.items.map(function(listValue, index){
+                return <span className="button" onClick={() => this.answer(listValue)}>listValue</span>;
+              })} 
+            </span>
           }
           <span className="form-question-details">{this.state.nextStateContext}</span>
 	      	<span className="form-question-example">e.g: {this.state.nextStatePlaceholder}</span>
