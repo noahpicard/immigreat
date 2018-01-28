@@ -6,10 +6,10 @@ class i589 extends Form {
   constructor() {
     super();
 
-    this.form = path.join(__dirname, 'i589ApplicationForAsylum.pdf');
+    this.form = path.join(__dirname, '../../../src/forms/i589/i589ApplicationForAsylum.pdf');
 
     this.states = [
-      State({
+      new State({
         key: 'INITIAL',
         question: 'Do you speak English?',
         type: 'BOOLEAN',
@@ -17,14 +17,14 @@ class i589 extends Form {
         initial: true,
       }).ifTrue('AGE').ifFalse('FAILED'),
 
-      State({
+      new State({
         key: 'AGE',
         question: 'How old are you?',
         type: 'NUMERIC',
         field: 'USER_AGE',
-      }).ifGreaterThanOrEqualTo(18, 'COMPLETE').goTo('FAILED')
+      }).ifGreaterThanOrEqualTo(18, 'COMPLETE').goTo('FAILED'),
 
-      State({
+      new State({
         key: 'FAILED',
         question: 'We cannot help you at this time.',
         type: 'NONE',
@@ -32,13 +32,14 @@ class i589 extends Form {
         final: true,
       }),
 
-      State({
-        state: 'COMPLETE',
+      new State({
+        key: 'COMPLETE',
         question: 'You have completed the questionnaire.',
         type: 'NONE',
         field: null,
         final: true,
-     }),
+      }),
+    ]
   }
 }
 

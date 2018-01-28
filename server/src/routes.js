@@ -42,4 +42,23 @@ module.exports = (app) => {
       nextStateOptions: nextState.options,
     })
   });
+
+  app.post('/form/:id/publish', (req, res) => {
+    if (!supportedForms.includes(req.params.id)) {
+      return res.status(400).send('Invalid form identifier.')
+    }
+
+    const FormClass = require(path.join(__dirname, 'forms', req.params.id));
+
+    const form = new FormClass();
+
+    form.write(req.body.state, (err, file) => {
+      if (err) { console.log(err); return res.sendStatus(500); }
+
+      res.status(200).send({
+        'resource': file,
+      });
+    });
+
+  });
 }

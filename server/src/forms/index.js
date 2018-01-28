@@ -1,13 +1,15 @@
 const pdf = require('pdf-fill-form');
-const tmp = require('tmp');
+const rand = require('random-int');
+const util = require('util');
+const path = require('path');
+const fs = require('fs');
 
-const WRITE_OPTIONS = {'save': 'pdf', 'cores': 4 }
+const WRITE_OPTIONS = {'save': 'pdf', 'cores': 4 };
+const TARGET_DIRECTORY = path.join(__dirname, '../../../published');
 
 const supportedForms = [
   "i589",
 ];
-
-tmp.setGracefulCleanup();
 
 class State {
   constructor({ key, context, placeholder, question, type, options, field, final = false, initial = false }) {
@@ -136,32 +138,50 @@ class Form {
     return pdf.readSync(this.form);
   }
 
-  write(fields, callback) {
+  write(state, callback) {
     // Writes the current state of the form to a file.
     // Accepts fields to write to the form, and a callback.
 
-    tmp.file((err, path, fd, cleanup) => {
-      if (err) { return callback(err); }
+    const fields = this.mapStateToFields(state);
 
-      // We've created a temporary file, now write the filled form to it.
-      pdf.write(this.form, fields, WRITE_OPTIONS).then(
-        (result) => {
+    const filename = this.generateFileToWrite();
 
-          // We've prepared data to be written to the filled form.
-          fs.writeFile(path, result, (err) => {
-            if (err) {
-              return callback(err);
-            }
+    // We've created a temporary file, now write the filled form to it.
+    pdf.write(this.form, fields, WRITE_OPTIONS).then(
+      (result) => {
 
-            // We've successfully filled the form out.
-            callback(null, path, cleanup);
-          });
-        },
-        (err) => {
-          return callback(err);
-        },
-      );
-    });
+        // We've prepared data to be written to the filled form.
+        fs.writeFile(path.join(TARGET_DIRECTORY, filename), result, (err) => {
+          if (err) {
+            return callback(err);
+          }
+
+          // We've successfully filled the form out.
+          callback(null, filename);
+        });
+      },
+      (err) => {
+        return callback(err);
+      },
+    );
+  }
+
+  mapStateToFields(state) {
+    return {}
+  }
+
+  generateFileToWrite() {
+    let isCollision = true;
+    let fileName = "";
+    while (isCollision) {
+      fileName = util.format("form%d.pdf", rand(1, 64000))
+
+      if (!fs.existsSync(path.join(TARGET_DIRECTORY, fileName))) {
+        isCollision = false;
+      }
+    }
+
+    return fileName;
   }
 
   transition(current, state) {
