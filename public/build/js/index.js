@@ -44,6 +44,7 @@ var FormFlow = function (_React$Component) {
     _this.componentWillMount = _this.componentWillMount.bind(_this);
     _this.answer = _this.answer.bind(_this);
     _this.handleTextChange = _this.handleTextChange.bind(_this);
+    _this.handleKeyPress = _this.handleKeyPress.bind(_this);
     return _this;
   }
 
@@ -71,6 +72,13 @@ var FormFlow = function (_React$Component) {
         this.answer();
       } else if (this.state.nextStateType == "STRING") {
         this.answer(this.state.answerText);
+      }
+    }
+  }, {
+    key: 'handleKeyPress',
+    value: function handleKeyPress(e) {
+      if (e.key === 'Enter') {
+        this.submit(e);
       }
     }
   }, {
@@ -161,7 +169,7 @@ var FormFlow = function (_React$Component) {
       var self = this;
       return _react2.default.createElement(
         'div',
-        { className: 'form-flow' },
+        { className: 'form-flow', onKeyPress: this.handleKeyPress },
         _react2.default.createElement(
           'h1',
           { className: 'form-title' },
@@ -176,8 +184,12 @@ var FormFlow = function (_React$Component) {
             { className: 'form-question' },
             this.state.nextStateQuestion
           ),
-          this.state.nextStateType == "STRING" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer', placeholder: this.state.nextStatePlaceholder, value: this.state.answerText, onChange: this.handleTextChange }),
-          this.state.nextStateType == "NUMERIC" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer', placeholder: this.state.nextStatePlaceholder, value: this.state.answerText, onChange: this.handleTextChange }),
+          this.state.nextStateType == "STRING" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer',
+            placeholder: this.state.nextStatePlaceholder, value: this.state.answerText,
+            onChange: this.handleTextChange }),
+          this.state.nextStateType == "NUMERIC" && _react2.default.createElement('input', { className: 'form-answer-text', type: 'text', name: 'answer',
+            placeholder: this.state.nextStatePlaceholder, value: this.state.answerText,
+            onChange: this.handleTextChange }),
           this.state.nextStateType == "BOOLEAN" && _react2.default.createElement(
             'div',
             { className: 'button-section' },
@@ -214,7 +226,7 @@ var FormFlow = function (_React$Component) {
             { className: 'form-question-details' },
             this.state.nextStateContext
           ),
-          _react2.default.createElement(
+          this.state.nextStatePlaceholder != "" && _react2.default.createElement(
             'span',
             { className: 'form-question-example' },
             'e.g: ',

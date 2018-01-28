@@ -18,6 +18,7 @@ class FormFlow extends React.Component {
     this.componentWillMount = this.componentWillMount.bind(this);
     this.answer = this.answer.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   componentWillMount() {
@@ -47,6 +48,12 @@ class FormFlow extends React.Component {
     }
   }
 
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.submit(e);
+    }
+  }
+
   finishForm() {
     const self = this;
     
@@ -73,13 +80,12 @@ class FormFlow extends React.Component {
     const self = this;
     
     let url = "/" + pdf;
-    let addon = window.location.hostname;
 
     console.log("showing pdf");
     console.log(this.props.id);
     console.log(url);
 
-    window.open(addon + url,'_blank');
+    window.open(url,'_blank');
   }
 
 
@@ -134,17 +140,21 @@ class FormFlow extends React.Component {
   render() {
     const self = this;
     return(
-      <div className="form-flow">
+      <div className="form-flow" onKeyPress={this.handleKeyPress}>
       	<h1 className="form-title">{this.props.item} Form</h1>
       	<div className="form-question-container">
 	      	<span className="form-question">{this.state.nextStateQuestion}</span>
           
           { this.state.nextStateType == "STRING" &&
-	         <input className="form-answer-text" type="text" name="answer" placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} onChange={this.handleTextChange}></input>
+	         <input className="form-answer-text" type="text" name="answer" 
+                placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} 
+                onChange={this.handleTextChange}></input>
 	      	}
 
           { this.state.nextStateType == "NUMERIC" &&
-           <input className="form-answer-text" type="text" name="answer" placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} onChange={this.handleTextChange}></input>
+           <input className="form-answer-text" type="text" name="answer" 
+                placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} 
+                onChange={this.handleTextChange}></input>
           }
 
           { this.state.nextStateType == "BOOLEAN" &&
@@ -163,7 +173,9 @@ class FormFlow extends React.Component {
           }
           
           <span className="form-question-details">{this.state.nextStateContext}</span>
-	      	<span className="form-question-example">e.g: {this.state.nextStatePlaceholder}</span>
+	      	{this.state.nextStatePlaceholder != "" &&
+            <span className="form-question-example">e.g: {this.state.nextStatePlaceholder}</span>
+          }
 	      	<div className="button form-question-submit-button" onClick={this.submit}>Next</div>
       	</div>
       </div>

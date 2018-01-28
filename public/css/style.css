@@ -71,7 +71,7 @@ a {
 
 .welcome-message {
 	color: #333;
-	margin: 3em;
+	margin: 3em 1em;
 }
 
 .button {
@@ -132,6 +132,7 @@ a {
 	border-radius: .5em;
 	min-height: 300px;
 	width: 100%;
+	padding: 1em;
 }
 
 .form-question {
