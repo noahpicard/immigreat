@@ -161,7 +161,7 @@ class i589 extends Form {
         key: 'ENGLISH_FLUENCY',
         question: ' Are you fluent in English?',
         context: 'Do NOT say you are fluent in English unless you really are, and are willing to give up your right to bring an interpreter to your asylum interview (and have one supplied by the U.S. government if your case later proceeds to immigration court).',
-        type: 'BOOL',
+        type: 'BOOLEAN',
         field: 'ENGLISH_FLUENCY',
       }).goTo('OTHER_FLUENCY'),
 
@@ -201,7 +201,7 @@ class i589 extends Form {
       new State({
         key: 'RESIDENCE_US_CITY',
         question: 'In which city?',
-        type: 'String',
+        type: 'STRING',
         placeholder: 'Chicago',
         field: 'RESIDENCE_US_CITY',
       }).goTo('RESIDENCE_US_STATE'),
@@ -209,7 +209,7 @@ class i589 extends Form {
       new State({
         key: 'RESIDENCE_US_STATE',
         question: 'In which state?',
-        type: 'String',
+        type: 'STRING',
         placeholder: 'Illinois',
         field: 'RESIDENCE_US_STATE',
       }).goTo('RESIDENCE_US_ZIPCODE'),
@@ -234,14 +234,14 @@ class i589 extends Form {
         key: 'FORM_FILLING',
         question: 'Is someone filling out this form for you?',
         context: 'If a lawyer or someone else if filling out this form for you, then this tool might not be helpful to you. This service is not intended as professional legal advice. Please consult your lawyer if you have one.',
-        type: 'BOOL',
+        type: 'BOOLEAN',
         field: 'FORM_FILLING',
       }).goTo('MAIL_ADDRESS'),
 
       new State({
         key: 'MAIL_ADDRESS',
         question: 'Is your mailing address the same as the one you just entered?',
-        type: 'BOOL',
+        type: 'BOOLEAN',
         field: 'MAIL_ADDRESS',
       }).ifFalse('MAIL_ADDRESS_STREET').ifTrue('ALIEN_NUM'),
 
@@ -273,7 +273,7 @@ class i589 extends Form {
       new State({
         key: 'MAIL_ADDRESS_CITY',
         question: 'In which city?',
-        type: 'String',
+        type: 'STRING',
         placeholder: 'Chicago',
         field: 'MAIL_ADDRESS_CITY',
       }).goTo('MAIL_ADDRESS_STATE'),
@@ -281,7 +281,7 @@ class i589 extends Form {
       new State({
         key: 'MAIL_ADDRESS_STATE',
         question: 'In which state?',
-        type: 'String',
+        type: 'STRING',
         placeholder: 'Illinois',
         field: 'MAIL_ADDRESS_STATE',
       }).goTo('MAIL_ADDRESS_ZIPCODE'),
@@ -350,7 +350,7 @@ class i589 extends Form {
       new State({
         key: 'COURT_NOW',
         question: 'Are you currently in a court proceeding?',
-        type: 'BOOL',
+        type: 'BOOLEAN',
         field: 'COURT_NOW',
       }).ifFalse('COURT_EVER').ifTrue('MARITAL'),
 
@@ -358,14 +358,14 @@ class i589 extends Form {
         key: 'COURT_EVER',
         question: 'Have you ever been through immigration court proceedings?',
         context: 'If you have ever seen an immigration judge in removal proceedings or been arrested by immigration or border patrol authorities, see an attorney for help with your asylum application. You may not be eligible to File I-589 except via the immigration court.',
-        type: 'BOOL',
+        type: 'BOOLEAN',
         field: 'COURT_EVER',
       }).goTo('MARITAL'),
 
       new State({
         key: 'COURT_NOW',
         question: 'Are you currently in a court proceeding?',
-        type: 'BOOL',
+        type: 'BOOLEAN',
         field: 'COURT_NOW',
       }).ifFalse('COURT_EVER').ifTrue('MARITAL'),
 
