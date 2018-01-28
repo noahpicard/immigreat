@@ -56,7 +56,7 @@ class FormFlow extends React.Component {
 
   finishForm() {
     const self = this;
-    
+
     let postUrl = "/form/" + this.props.id + "/publish";
 
     console.log("finishing form");
@@ -78,7 +78,7 @@ class FormFlow extends React.Component {
 
   showPDF(pdf) {
     const self = this;
-    
+
     let url = "/" + pdf;
 
     console.log("showing pdf");
@@ -97,7 +97,7 @@ class FormFlow extends React.Component {
     this.setState({questionState: state});
 
     this.clearFields();
-    
+
     let postUrl = "/form/" + this.props.id;
 
     if (this.state.nextStateFinal == true) {
@@ -119,6 +119,7 @@ class FormFlow extends React.Component {
       self.setState({
         "nextStateQuestion":"",
         "nextStateType":"",
+        "nextStateField":"",
         "nextStateContext":"",
         "nextStatePlaceholder":"",
       });
@@ -144,16 +145,16 @@ class FormFlow extends React.Component {
       	<h1 className="form-title">{this.props.item} Form</h1>
       	<div className="form-question-container">
 	      	<span className="form-question">{this.state.nextStateQuestion}</span>
-          
+
           { this.state.nextStateType == "STRING" &&
-	         <input className="form-answer-text" type="text" name="answer" 
-                placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} 
+	         <input className="form-answer-text" type="text" name="answer"
+                placeholder={this.state.nextStatePlaceholder} value={this.state.answerText}
                 onChange={this.handleTextChange}></input>
 	      	}
 
           { this.state.nextStateType == "NUMERIC" &&
-           <input className="form-answer-text" type="text" name="answer" 
-                placeholder={this.state.nextStatePlaceholder} value={this.state.answerText} 
+           <input className="form-answer-text" type="text" name="answer"
+                placeholder={this.state.nextStatePlaceholder} value={this.state.answerText}
                 onChange={this.handleTextChange}></input>
           }
 
@@ -168,10 +169,10 @@ class FormFlow extends React.Component {
             <div className="button-section">
               {this.state.nextStateOptions.map(function(listValue, index){
                 return <span className="button" key={index} onClick={() => self.answer(listValue)}>{listValue}</span>;
-              })} 
+              })}
             </div>
           }
-          
+
           <span className="form-question-details">{this.state.nextStateContext}</span>
 	      	{this.state.nextStatePlaceholder != "" &&
             <span className="form-question-example">e.g: {this.state.nextStatePlaceholder}</span>
