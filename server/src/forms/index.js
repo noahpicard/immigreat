@@ -10,7 +10,7 @@ const supportedForms = [
 tmp.setGracefulCleanup();
 
 class State {
-  constructor({ key, context, placeholder, question, type, field, final = false, initial = false }) {
+  constructor({ key, context, placeholder, question, type, options, field, final = false, initial = false }) {
     // A unique key that identifies this state.
     this.key = key;
 
@@ -34,8 +34,11 @@ class State {
     // Is this the initial state.
     this.initial = initial;
 
+    // Available options, for a 'multi' state.
+    this.options = options;
+
     // An associated type of question.
-    if (!['STRING', 'BOOLEAN', 'NUMERIC', 'NONE'].includes(type)) {
+    if (!['STRING', 'BOOLEAN', 'NUMERIC', 'MULTI', 'NONE'].includes(type)) {
       throw Error('Invalid type provided.');
     }
     this.type = type;
