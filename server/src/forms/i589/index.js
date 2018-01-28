@@ -8,18 +8,18 @@ class i589 extends Form {
 
     this.form = path.join(__dirname, 'i589ApplicationForAsylum.pdf');
 
-    this.states = [,
+    this.states = [
 
       new State({ 
         key: 'INTRO',
-        contex: 
+        question: 'Introduction',
         type: 'NONE',
         field: 'INTRO',
         placeholder: 'Nour',
         initial: true, // This is the first pop up info blurb
       }).goTo('FIRST_NAME'),
 
-      State({ 
+      new State({ 
         key: 'FIRST_NAME',
         question: 'What is your first name?',
         type: 'STRING',
@@ -324,7 +324,7 @@ class i589 extends Form {
 
       new State({ 
         key: '19_a',
-        question: 'When did you last leave your country?'
+        question: 'When did you last leave your country?',
         type: 'NUMERIC',
         placeholder: 'MM/DD/YYY',
         field: '19_a',
@@ -363,7 +363,7 @@ class i589 extends Form {
         field: 'COURT_EVER',
       }).goTo('MARITAL'),
 
-      State({ 
+      new State({ 
         key: 'COURT_NOW',
         question: 'Are you currently in a court proceeding?',
         type: 'BOOL',
@@ -372,7 +372,7 @@ class i589 extends Form {
 
       // MARITAL SECTION - Skipped if not married
 
-      State({ 
+      new State({ 
         key: 'SPOUSE_NAME',
         question: 'What is your spouse\'s name?',
         type: 'STRING',
@@ -380,7 +380,7 @@ class i589 extends Form {
         placeholder: 'Nour',
       }).goTo('SPOUSE_MIDDLE_NAME'),
 
-      State({
+      new State({
         key: 'SPOUSE_MIDDLE_NAME',
         question: 'What is your spouse\'s middle name?',
         type: 'STRING',
@@ -388,7 +388,7 @@ class i589 extends Form {
         placeholder: 'Abdulla',
       }).goTo('SPOUSE_LAST_NAME'),
 
-      State({
+      new State({
         key: 'SPOUSE_LAST_NAME',
         question: 'What is your spouse\'s last name?',
         type: 'STRING',
@@ -396,7 +396,7 @@ class i589 extends Form {
         placeholder: 'Aldalaijan',
       }).goTo('SPOUSE_OTHER_NAMES'),
 
-      State({
+      new State({
         key: 'SPOUSE_OTHER_NAMES',
         question: 'Has your used any other names? (Include maiden name and aliases). If so, please provide them here.',
         placeholder: 'John Doe, Johnny Doe',
@@ -405,7 +405,7 @@ class i589 extends Form {
         field: 'SPOUSE_OTHER_NAMES',
       }).goTo('SPOUSE_DOB'),
 
-      State({ 
+      new State({ 
         key: 'SPOUSE_DOB',
         question: 'What is your spouse\'s date of birth?',
         context: 'If you aren\'t sure of the birth date (and aren\'t able to locate documents showing it), you can enter your best estimate or write "unknown." Then enter an asterisk and explain the situation in your Supplement.',
@@ -414,15 +414,15 @@ class i589 extends Form {
         field: 'SPOUSE_DOB',
       }).goTo('SPOUSE_BIRTH_CITY_COUNTRY'),
 
-      State({ 
+      new State({ 
         key: 'SPOUSE_BIRTH_CITY_COUNTRY',
-        question: 'In which country and city was your spouse born?'
+        question: 'In which country and city was your spouse born?',
         type: 'STRING',
         placeholder: 'Damascus, Syria',
         field: 'SPOUSE_BIRTH_CITY_COUNTRY',
       }).goTo('SPOUSE_PRESENT_NATIONALITY'),
 
-      State({ 
+      new State({ 
         key: 'SPOUSE_PRESENT_NATIONALITY',
         question: 'What is your spouse\'s Nationality right now?',
         context: 'You can say that they are stateless if their nationality has been taken away from them and you have no legal right to live in any country. The fact that you might be arrested if you return to your home country, however, does not make you stateless.',
@@ -431,7 +431,7 @@ class i589 extends Form {
         field: 'SPOUSE_PRESENT_NATIONALITY',
       }).goTo('SPOUSE_RACE'),
 
-      State({ 
+      new State({ 
         key: 'RACE',
         question: 'What Race, Ethnic or Tribal Group does your spouse belong to?',
         context: 'If you are applying for asylum based on race, ethnicity, or tribal affiliation, enter the name of your group here. Make sure that the identifying name matches any evidence that you are attaching to prove your claim. If you need further space to explain, use Supplement B.',
