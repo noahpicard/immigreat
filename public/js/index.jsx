@@ -47,6 +47,41 @@ class FormFlow extends React.Component {
     }
   }
 
+  finishForm() {
+    const self = this;
+    
+    let postUrl = "/form/" + this.props.id + "/publish";
+
+    console.log("finishing form");
+    console.log(this.props.id);
+    console.log(postUrl);
+
+    axios.post(postUrl, {
+      "current": this.state.nextState,
+      "state": this.state.questionState
+    })
+    .then(function (response) {
+      console.log(response);
+      self.showPDF(response.data.resource);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  showPDF(pdf) {
+    const self = this;
+    
+    let url = "/" + pdf;
+    let addon = window.location.hostname;
+
+    console.log("showing pdf");
+    console.log(this.props.id);
+    console.log(url);
+
+    window.open(addon + url,'_blank');
+  }
+
 
   answer(answer) {
     const self = this;
@@ -56,17 +91,31 @@ class FormFlow extends React.Component {
     this.setState({questionState: state});
 
     this.clearFields();
-
+    
     let postUrl = "/form/" + this.props.id;
+
+    if (this.state.nextStateFinal == true) {
+      this.finishForm();
+      return
+    }
+
     console.log("sending answer");
     console.log(this.props.id);
     console.log(postUrl);
+
+
     axios.post(postUrl, {
       "current": this.state.nextState,
       "state": this.state.questionState
     })
     .then(function (response) {
       console.log(response);
+      self.setState({
+        "nextStateQuestion":"",
+        "nextStateType":"",
+        "nextStateContext":"",
+        "nextStatePlaceholder":"",
+      });
       self.setState(response.data);
     })
     .catch(function (error) {
