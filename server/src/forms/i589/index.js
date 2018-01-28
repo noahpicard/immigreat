@@ -13,17 +13,17 @@ class i589 extends Form {
       State({ 
         key: 'INTRO',
         contex: 
-        type: None,
+        type: 'NONE',
         field: 'INTRO',
         placeholder: 'Nour',
         initial: true, // This is the first pop up info blurb
-      }).goTo('MIDDLE_NAME'),
+      }).goTo('FIRST_NAME'),
 
       State({ 
-        key: 'NAME',
-        question: 'What is your name?',
+        key: 'FIRST_NAME',
+        question: 'What is your first name?',
         type: 'STRING',
-        field: 'NAME',
+        field: 'FIRST_NAME',
         placeholder: 'Nour',
       }).goTo('MIDDLE_NAME'),
 
@@ -244,7 +244,7 @@ class i589 extends Form {
         question: 'Is your mailing address the same as the one you just entered?',
         type: 'BOOL',
         field: 'MAIL_ADDRESS',
-      }).if('False').goTo('MAIL_ADDRESS_STREET').if('True').goTo('ALIEN_NUM'),
+      }).ifFalse('MAIL_ADDRESS_STREET').ifTrue('ALIEN_NUM'),
 
       State({ 
         key: 'MAIL_ADDRESS_STREET',
@@ -350,12 +350,77 @@ class i589 extends Form {
 
       State({ 
         key: 'COURT_NOW',
-        question: 'Are you currently in a court proceeding',
-        context: 'If you have entered the US on a Visa before your I-94 number should be entered here. If you have not, this question does not appy and you can skip it.  Be sure to answer this section completely and truthfully even if you entered without inspection or overstayed your visa. In most cases, immigration violations will not affect your asylum case if they were due to an effort to escape persecution.',
-        type: 'NUMERIC',
-        placeholder: '0123456789',
+        question: 'Are you currently in a court proceeding?',
+        type: 'BOOL',
         field: 'COURT_NOW',
-      }).goTo('COURT_NOW'),
+      }).ifFalse('COURT_EVER').ifTrue('MARITAL'),
+
+      State({ 
+        key: 'COURT_EVER',
+        question: 'Have you ever been through immigration court proceedings?',
+        context: 'If you have ever seen an immigration judge in removal proceedings or been arrested by immigration or border patrol authorities, see an attorney for help with your asylum application. You may not be eligible to File I-589 except via the immigration court.',
+        type: 'BOOL',
+        field: 'COURT_EVER',
+      }).goTo('MARITAL'),
+
+      State({ 
+        key: 'COURT_NOW',
+        question: 'Are you currently in a court proceeding?',
+        type: 'BOOL',
+        field: 'COURT_NOW',
+      }).ifFalse('COURT_EVER').ifTrue('MARITAL'),
+
+      // MARITAL SECTION - Skipped if not married
+
+      State({ 
+        key: 'SPOUSE_NAME',
+        question: 'What is your spouse\'s name?',
+        type: 'STRING',
+        field: 'SPOUSE_NAME',
+        placeholder: 'Nour',
+      }).goTo('SPOUSE_MIDDLE_NAME'),
+
+      State({
+        key: 'SPOUSE_MIDDLE_NAME',
+        question: 'What is your spouse\'s middle name?',
+        type: 'STRING',
+        field: 'SPOUSE_MIDDLE_NAME',
+        placeholder: 'Abdulla',
+      }).goTo('SPOUSE_LAST_NAME'),
+
+      State({
+        key: 'SPOUSE_LAST_NAME',
+        question: 'What is your spouse\'s last name?',
+        type: 'STRING',
+        field: 'SPOUSE_LAST_NAME',
+        placeholder: 'Aldalaijan',
+      }).goTo('SPOUSE_OTHER_NAMES'),
+
+      State({
+        key: 'SPOUSE_OTHER_NAMES',
+        question: 'Has your used any other names? (Include maiden name and aliases). If so, please provide them here.',
+        placeholder: 'John Doe, Johnny Doe',
+        context: 'If your spouse has a different name when travelling make sure to start using their real name now.',
+        type: 'STRING',
+        field: 'SPOUSE_OTHER_NAMES',
+      }).goTo('SPOUSE_DOB'),
+
+      State({ 
+        key: 'SPOUSE_DOB',
+        question: 'What is your spouse\'s date of birth?',
+        context: 'If you aren\'t sure of the birth date (and aren\'t able to locate documents showing it), you can enter your best estimate or write "unknown." Then enter an asterisk and explain the situation in your Supplement.',
+        type: 'NUMERIC',
+        placeholder: 'MM-DD-YYYY',
+        field: 'SPOUSE_DOB',
+      }).goTo('SPOUSE_BIRTH_CITY_COUNTRY'),
+
+      State({ 
+        key: 'SPOUSE_BIRTH_CITY_COUNTRY',
+        question: 'In which country and city were you born?'
+        type: 'STRING',
+        placeholder: 'Damascus, Syria',
+        field: 'SPOUSE_BIRTH_CITY_COUNTRY',
+      }).goTo('SPOUSE_BIRTH_NATIONALITY'),
       
 
 
