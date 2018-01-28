@@ -1,4 +1,5 @@
 const { supportedForms } = require('./forms');
+const path = require('path');
 
 module.exports = (app) => {
   app.get('/form', (req, res) => {
@@ -7,12 +8,14 @@ module.exports = (app) => {
     });
   });
 
-  app.get('/form/:id', (req, res) => {
+  app.post('/form/:id', (req, res) => {
     if (!supportedForms.includes(req.params.id)) {
       return res.status(400).send('Invalid form identifier.')
     }
 
-    const form = new require(path.join(__dirname, 'forms', req.params.id))();
+    const FormClass = require(path.join(__dirname, 'forms', req.params.id));
+
+    const form = new FormClass();
 
     let nextState;
     if (!req.body.current) {

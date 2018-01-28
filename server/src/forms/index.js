@@ -52,6 +52,8 @@ class State {
 
       return null;
     });
+
+    return this;
   }
 
   ifTrue(destination) {
@@ -62,6 +64,8 @@ class State {
 
       return false;
     });
+
+    return this;
   }
 
   ifFalse(destination) {
@@ -72,6 +76,8 @@ class State {
 
       return false;
     });
+
+    return this;
   }
 
   ifGreaterThanOrEqualTo(threshold, destination) {
@@ -82,6 +88,8 @@ class State {
 
       return false;
     });
+
+    return this;
   }
 
   ifLessThanOrEqualTo(threshold, destination) {
@@ -92,6 +100,8 @@ class State {
 
       return false;
     });
+
+    return this;
   }
 
   ifEqualTo(threshold, destination) {
@@ -102,6 +112,8 @@ class State {
 
       return false;
     });
+
+    return this;
   }
 
   goTo(destination) {
@@ -179,5 +191,6 @@ class Form {
 
 module.exports = {
   Form,
+  State,
   supportedForms,
 }
